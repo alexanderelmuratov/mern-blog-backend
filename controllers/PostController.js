@@ -118,3 +118,22 @@ export const updatePost = async (req, res) => {
     });
   }
 };
+
+// ========== ПОЛУЧЕНИЕ ПОСЛЕДНИХ ТЭГОВ ==========
+export const getLastTags = async (req, res) => {
+  try {
+    const posts = await PostModel.find().limit(5).exec();
+
+    const tags = posts
+      .map(post => post.tags)
+      .flat()
+      .slice(0, 5);
+
+    res.json(tags);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'Не удалось получить тэги',
+    });
+  }
+};
