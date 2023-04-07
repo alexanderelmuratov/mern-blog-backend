@@ -23,7 +23,9 @@ export const getOnePost = async (req, res) => {
       { _id: postId },
       { $inc: { viewsCount: 1 } },
       { new: true }
-    );
+    )
+      .populate('user')
+      .exec();
 
     if (!post) {
       return res.status(404).json({
