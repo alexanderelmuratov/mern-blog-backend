@@ -44,7 +44,8 @@ app.post(
 );
 app.get('/auth/me', checkAuth, UserController.getMe);
 
-app.get('/posts', PostController.getAllPosts);
+app.get('/posts/new', PostController.getNewPosts);
+app.get('/posts/popular', PostController.getPopularPosts);
 app.get('/posts/:id', PostController.getOnePost);
 app.post(
   '/posts',

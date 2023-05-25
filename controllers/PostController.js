@@ -1,9 +1,29 @@
 import PostModel from '../models/Post.js';
 
-// ========== ПОЛУЧЕНИЕ ВСЕХ СТАТЕЙ ==========
-export const getAllPosts = async (req, res) => {
+// ========== ПОЛУЧЕНИЕ НОВЫХ СТАТЕЙ ==========
+export const getNewPosts = async (req, res) => {
   try {
-    const posts = await PostModel.find().populate('user').exec();
+    const posts = await PostModel.find()
+      .sort({ createdAt: -1 })
+      .populate('user')
+      .exec();
+
+    res.json(posts);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'Не удалось получить статьи',
+    });
+  }
+};
+
+// ========== ПОЛУЧЕНИЕ ПОПУЛЯРНЫХ СТАТЕЙ ==========
+export const getPopularPosts = async (req, res) => {
+  try {
+    const posts = await PostModel.find()
+      .sort({ viewsCount: -1 })
+      .populate('user')
+      .exec();
 
     res.json(posts);
   } catch (error) {
@@ -124,12 +144,13 @@ export const updatePost = async (req, res) => {
 // ========== ПОЛУЧЕНИЕ ПОСЛЕДНИХ ТЭГОВ ==========
 export const getLastTags = async (req, res) => {
   try {
-    const posts = await PostModel.find().limit(5).exec();
+    const random = Math.floor(Math.random() * 10);
+    const posts = await PostModel.find().skip(random).exec();
 
     const tags = posts
       .map(post => post.tags)
       .flat()
-      .slice(0, 5);
+      .slice(0, 7);
 
     res.json(tags);
   } catch (error) {
