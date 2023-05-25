@@ -34,6 +34,24 @@ export const getPopularPosts = async (req, res) => {
   }
 };
 
+// ========== ПОЛУЧЕНИЕ ЛИЧНЫХ СТАТЕЙ ==========
+export const getOwnPosts = async (req, res) => {
+  try {
+    const { userId } = req;
+
+    const posts = await PostModel.find({ user: userId })
+      .populate('user')
+      .exec();
+
+    res.json(posts);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'Не удалось получить статьи',
+    });
+  }
+};
+
 // ========== ПОЛУЧЕНИЕ ОДНОЙ СТАТЬИ ==========
 export const getOnePost = async (req, res) => {
   try {
