@@ -52,6 +52,24 @@ export const getOwnPosts = async (req, res) => {
   }
 };
 
+// ========== ПОЛУЧЕНИЕ СТАТЕЙ ПО ТЕГУ ==========
+export const getPostsByTag = async (req, res) => {
+  try {
+    const { tag } = req.query;
+
+    const postsByTag = await PostModel.find({ tags: { $in: tag } })
+      .populate('user')
+      .exec();
+
+    res.json(postsByTag);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'Не удалось получить статьи',
+    });
+  }
+};
+
 // ========== ПОЛУЧЕНИЕ ОДНОЙ СТАТЬИ ==========
 export const getOnePost = async (req, res) => {
   try {
@@ -160,7 +178,7 @@ export const updatePost = async (req, res) => {
 };
 
 // ========== ПОЛУЧЕНИЕ ПОСЛЕДНИХ ТЭГОВ ==========
-export const getLastTags = async (req, res) => {
+export const getRandomTags = async (req, res) => {
   try {
     const random = Math.floor(Math.random() * 10);
     const posts = await PostModel.find().skip(random).exec();
@@ -169,6 +187,8 @@ export const getLastTags = async (req, res) => {
       .map(post => post.tags)
       .flat()
       .slice(0, 7);
+
+    console.log(tags);
 
     res.json(tags);
   } catch (error) {

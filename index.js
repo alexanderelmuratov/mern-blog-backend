@@ -47,6 +47,7 @@ app.get('/auth/me', checkAuth, UserController.getMe);
 app.get('/posts/new', PostController.getNewPosts);
 app.get('/posts/popular', PostController.getPopularPosts);
 app.get('/posts/own', checkAuth, PostController.getOwnPosts);
+app.get('/posts', PostController.getPostsByTag);
 app.get('/posts/:id', PostController.getOnePost);
 app.post(
   '/posts',
@@ -64,7 +65,7 @@ app.patch(
   PostController.updatePost
 );
 
-app.get('/tags', PostController.getLastTags);
+app.get('/tags', PostController.getRandomTags);
 
 app.post('/uploads', checkAuth, upload.single('image'), (req, res) => {
   res.json({ url: `/uploads/${req.file.originalname}` });
