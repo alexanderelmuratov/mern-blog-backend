@@ -1,6 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
 
 import {
   checkAuth,
@@ -18,9 +20,7 @@ import {
 import { UserController, PostController } from './controllers/index.js';
 
 mongoose
-  .connect(
-    'mongodb+srv://admin:LX7rFrP4sqTA0j2Y@cluster0.mxnwm7p.mongodb.net/blog?retryWrites=true&w=majority'
-  )
+  .connect(process.env.MONGODB_HOST)
   .then(() => console.log('DB ok'))
   .catch(error => console.log('DB error', error));
 
@@ -71,7 +71,7 @@ app.post('/uploads', checkAuth, upload.single('image'), (req, res) => {
   res.json({ url: `/uploads/${req.file.originalname}` });
 });
 
-app.listen(4000, error => {
+app.listen(process.env.PORT || 4000, error => {
   if (error) {
     return console.log(error);
   }
