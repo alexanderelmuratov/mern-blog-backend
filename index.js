@@ -15,9 +15,14 @@ import {
   loginValidation,
   createPostValidation,
   updatePostValidation,
+  createCommentValidation,
 } from './validations.js';
 
-import { UserController, PostController } from './controllers/index.js';
+import {
+  UserController,
+  PostController,
+  CommentController,
+} from './controllers/index.js';
 
 mongoose
   .connect(process.env.MONGODB_HOST)
@@ -63,6 +68,14 @@ app.patch(
   updatePostValidation,
   handleValidationErrors,
   PostController.updatePost
+);
+
+app.post(
+  '/posts/:id',
+  checkAuth,
+  createCommentValidation,
+  handleValidationErrors,
+  CommentController.createComment
 );
 
 app.get('/tags', PostController.getRandomTags);

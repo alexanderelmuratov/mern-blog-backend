@@ -35,3 +35,7 @@ export const updatePostValidation = [
   body('tags', 'Неверный формат тэгов (укажите массив)').optional().isArray(),
   body('imageUrl', 'Неверная ссылка на изображение').optional().isString(),
 ];
+
+export const createCommentValidation = [
+  body('text', 'Введите текст комментария').isString(),
+];
