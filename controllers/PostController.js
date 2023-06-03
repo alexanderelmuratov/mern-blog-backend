@@ -81,6 +81,7 @@ export const getOnePost = async (req, res) => {
       { new: true }
     )
       .populate('user')
+      .populate({ path: 'comments', populate: 'user' })
       .exec();
 
     if (!post) {
