@@ -10,7 +10,6 @@ export const createComment = async (req, res) => {
     });
 
     const comment = await doc.save();
-    console.log(comment);
 
     const postId = req.params.id;
 
@@ -34,6 +33,25 @@ export const createComment = async (req, res) => {
     console.log(error);
     res.status(500).json({
       message: 'Не удалось создать комментарий',
+    });
+  }
+};
+
+// ========== ПОЛУЧЕНИЕ ПОСЛЕДНИХ КОММЕНТАРИЕВ ==========
+export const getLastComments = async (req, res) => {
+  try {
+    const comments = await CommentModel.find()
+      .sort({ createdAt: -1 })
+      .populate('user')
+      .exec();
+
+    const lastComments = comments.filter((_, index) => index < 3);
+
+    res.json(lastComments);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'Не удалось получить комментарии',
     });
   }
 };

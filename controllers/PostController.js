@@ -178,7 +178,7 @@ export const updatePost = async (req, res) => {
   }
 };
 
-// ========== ПОЛУЧЕНИЕ ПОСЛЕДНИХ ТЭГОВ ==========
+// ========== ПОЛУЧЕНИЕ СЛУЧАЙНЫХ ТЕГОВ ==========
 export const getRandomTags = async (req, res) => {
   try {
     const random = Math.floor(Math.random() * 10);
@@ -189,13 +189,11 @@ export const getRandomTags = async (req, res) => {
       .flat()
       .slice(0, 7);
 
-    console.log(tags);
-
     res.json(tags);
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: 'Не удалось получить тэги',
+      message: 'Не удалось получить теги',
     });
   }
 };

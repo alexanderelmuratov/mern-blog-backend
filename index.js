@@ -69,7 +69,6 @@ app.patch(
   handleValidationErrors,
   PostController.updatePost
 );
-
 app.post(
   '/posts/:id',
   checkAuth,
@@ -79,6 +78,7 @@ app.post(
 );
 
 app.get('/tags', PostController.getRandomTags);
+app.get('/comments', CommentController.getLastComments);
 
 app.post('/uploads', checkAuth, upload.single('image'), (req, res) => {
   res.json({ url: `/uploads/${req.file.originalname}` });
