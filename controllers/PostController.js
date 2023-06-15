@@ -32,12 +32,24 @@ export const getNewPosts = async (req, res) => {
 // ========== ПОЛУЧЕНИЕ ПОПУЛЯРНЫХ СТАТЕЙ ==========
 export const getPopularPosts = async (req, res) => {
   try {
+    const { page, limit } = req.query;
+    const skip = (page - 1) * limit;
+
+    const totalCount = await PostModel.countDocuments().exec();
+
     const posts = await PostModel.find()
       .sort({ viewsCount: -1 })
+      .skip(skip)
+      .limit(limit)
       .populate('user')
       .exec();
 
-    res.json(posts);
+    const results = {
+      posts,
+      totalCount,
+    };
+
+    res.json(results);
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -50,12 +62,23 @@ export const getPopularPosts = async (req, res) => {
 export const getOwnPosts = async (req, res) => {
   try {
     const { userId } = req;
+    const { page, limit } = req.query;
+    const skip = (page - 1) * limit;
+
+    const totalCount = await PostModel.countDocuments().exec();
 
     const posts = await PostModel.find({ user: userId })
+      .skip(skip)
+      .limit(limit)
       .populate('user')
       .exec();
 
-    res.json(posts);
+    const results = {
+      posts,
+      totalCount,
+    };
+
+    res.json(results);
   } catch (error) {
     console.log(error);
     res.status(500).json({
