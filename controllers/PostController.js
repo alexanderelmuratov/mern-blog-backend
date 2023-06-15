@@ -3,12 +3,24 @@ import PostModel from '../models/Post.js';
 // ========== ПОЛУЧЕНИЕ НОВЫХ СТАТЕЙ ==========
 export const getNewPosts = async (req, res) => {
   try {
+    const { page, limit } = req.query;
+    const skip = (page - 1) * limit;
+
+    const totalCount = await PostModel.countDocuments().exec();
+
     const posts = await PostModel.find()
       .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
       .populate('user')
       .exec();
 
-    res.json(posts);
+    const results = {
+      posts,
+      totalCount,
+    };
+
+    res.json(results);
   } catch (error) {
     console.log(error);
     res.status(500).json({
