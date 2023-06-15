@@ -65,7 +65,7 @@ export const getOwnPosts = async (req, res) => {
     const { page, limit } = req.query;
     const skip = (page - 1) * limit;
 
-    const totalCount = await PostModel.countDocuments().exec();
+    const totalCount = await PostModel.countDocuments({ user: userId }).exec();
 
     const posts = await PostModel.find({ user: userId })
       .skip(skip)
