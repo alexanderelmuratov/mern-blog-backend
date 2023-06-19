@@ -91,10 +91,24 @@ app.post('/uploads', checkAuth, upload.single('image'), async (req, res) => {
   try {
     const result = await cloudinary.uploader.upload(req.file.path);
 
-    res.status(200).json({ url: result.secure_url });
+    res.status(200).json({
+      url: result.secure_url,
+      publicId: result.public_id,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to upload file' });
+  }
+});
+
+app.delete('/uploads', checkAuth, async (req, res) => {
+  try {
+    await cloudinary.uploader.destroy(req.body.publicId);
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to delete file' });
   }
 });
 
