@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -28,6 +29,12 @@ mongoose
   .connect(process.env.MONGODB_HOST)
   .then(() => console.log('DB ok'))
   .catch(error => console.log('DB error', error));
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const app = express();
 
@@ -80,8 +87,15 @@ app.post(
 app.get('/tags', PostController.getRandomTags);
 app.get('/comments', CommentController.getLastComments);
 
-app.post('/uploads', checkAuth, upload.single('image'), (req, res) => {
-  res.json({ url: `/uploads/${req.file.originalname}` });
+app.post('/uploads', checkAuth, upload.single('image'), async (req, res) => {
+  try {
+    const result = await cloudinary.uploader.upload(req.file.path);
+
+    res.status(200).json({ url: result.secure_url });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to upload file' });
+  }
 });
 
 app.listen(process.env.PORT || 4000, error => {
