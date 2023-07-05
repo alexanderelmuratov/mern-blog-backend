@@ -21,7 +21,6 @@ export const createPostValidation = [
   body('text', 'Введите текст статьи').isLength({ min: 10 }).isString(),
   body('tags', 'Неверный формат тэгов (укажите массив)').optional().isArray(),
   body('image', 'Неверная ссылка на изображение').optional().isObject(),
-  // body('imageUrl', 'Неверная ссылка на изображение').optional().isString(),
 ];
 
 export const updatePostValidation = [
@@ -35,7 +34,6 @@ export const updatePostValidation = [
     .isString(),
   body('tags', 'Неверный формат тэгов (укажите массив)').optional().isArray(),
   body('image', 'Неверная ссылка на изображение').optional().isObject(),
-  // body('imageUrl', 'Неверная ссылка на изображение').optional().isString(),
 ];
 
 export const createCommentValidation = [

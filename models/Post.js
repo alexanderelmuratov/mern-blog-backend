@@ -15,7 +15,6 @@ const PostSchema = new Schema(
       default: [],
     },
     image: Object,
-    // imageUrl: String,
     viewsCount: {
       type: Number,
       default: 0,
