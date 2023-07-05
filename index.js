@@ -101,9 +101,9 @@ app.post('/uploads', checkAuth, upload.single('image'), async (req, res) => {
   }
 });
 
-app.delete('/uploads', checkAuth, async (req, res) => {
+app.delete('/uploads/:id', checkAuth, async (req, res) => {
   try {
-    await cloudinary.uploader.destroy(req.body.publicId);
+    await cloudinary.uploader.destroy(req.params.id);
 
     res.status(200).json({ success: true });
   } catch (error) {
