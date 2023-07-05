@@ -162,19 +162,16 @@ export const removePost = async (req, res) => {
   try {
     const postId = req.params.id;
 
-    const postToRemove = await PostModel.findOneAndDelete({ _id: postId })
-      .populate('comment')
-      .exec();
-
-    postToRemove.comments.map(
-      async comment => await CommentModel.findOneAndDelete({ _id: comment._id })
-    );
+    const postToRemove = await PostModel.findOneAndDelete({ _id: postId });
 
     if (!postToRemove) {
       return res.status(404).json({
         message: 'Статья не найдена',
       });
     }
+
+    const commentIds = postToRemove.comments;
+    await CommentModel.deleteMany({ _id: { $in: commentIds } });
 
     res.json({
       success: true,
