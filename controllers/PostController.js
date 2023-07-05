@@ -1,4 +1,5 @@
 import PostModel from '../models/Post.js';
+import CommentModel from '../models/Comment.js';
 
 // ========== ПОЛУЧЕНИЕ НОВЫХ СТАТЕЙ ==========
 export const getNewPosts = async (req, res) => {
@@ -161,7 +162,13 @@ export const removePost = async (req, res) => {
   try {
     const postId = req.params.id;
 
-    const postToRemove = await PostModel.findOneAndDelete({ _id: postId });
+    const postToRemove = await PostModel.findOneAndDelete({ _id: postId })
+      .populate('comment')
+      .exec();
+
+    postToRemove.comments.map(
+      async comment => await CommentModel.findOneAndDelete({ _id: comment._id })
+    );
 
     if (!postToRemove) {
       return res.status(404).json({
