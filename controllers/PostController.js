@@ -142,7 +142,8 @@ export const createPost = async (req, res) => {
       title: req.body.title,
       text: req.body.text,
       tags: req.body.tags,
-      imageUrl: req.body.imageUrl,
+      image: req.body.image,
+      // imageUrl: req.body.imageUrl,
       user: req.userId,
     });
 
@@ -196,7 +197,8 @@ export const updatePost = async (req, res) => {
         title: req.body.title,
         text: req.body.text,
         tags: req.body.tags,
-        imageUrl: req.body.imageUrl,
+        image: req.body.image,
+        // imageUrl: req.body.imageUrl,
         user: req.userId,
       },
       { new: true }
